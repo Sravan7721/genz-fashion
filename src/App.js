@@ -21,7 +21,8 @@ export default function App() {
 
   return (
     <div>
-      {/* Navbar */}
+
+      {/* NAVBAR */}
       <div style={{ display: "flex", justifyContent: "space-between", padding: "15px 30px", background: "#111", color: "white" }}>
         <h2>🔥 GenZ Fashion</h2>
         <div style={{ display: "flex", gap: "20px", cursor: "pointer" }}>
@@ -35,23 +36,53 @@ export default function App() {
       {/* HOME */}
       {page === "home" && (
         <div style={{ textAlign: "center", padding: "40px" }}>
+          
           <h1>Upgrade Your Style 😎</h1>
           <p>Select Category</p>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: "30px", marginTop: "30px" }}>
+          {/* Categories */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "30px", marginTop: "30px", flexWrap: "wrap" }}>
+            
             <div onClick={() => setPage("boys")} style={{ cursor: "pointer" }}>
-              <img src="https://images.unsplash.com/photo-1516822003754-cca485356ecb" width="250" />
+              <img src="https://images.unsplash.com/photo-1516822003754-cca485356ecb" width="250" alt="GenZ Boys" />
               <h3>GenZ Boys</h3>
             </div>
+
             <div onClick={() => setPage("girls")} style={{ cursor: "pointer" }}>
-              <img src="https://images.unsplash.com/photo-1521334884684-d80222895322" width="250" />
+              <img src="https://images.unsplash.com/photo-1521334884684-d80222895322" width="250" alt="GenZ Girls" />
               <h3>GenZ Girls</h3>
             </div>
+
             <div onClick={() => setPage("accessories")} style={{ cursor: "pointer" }}>
-              <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083" width="250" />
+              <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083" width="250" alt="Accessories" />
               <h3>Accessories</h3>
             </div>
+
           </div>
+
+          {/* About */}
+          <div style={{ marginTop: "60px" }}>
+            <h2>About Us</h2>
+            <p style={{ maxWidth: "600px", margin: "auto" }}>
+              GenZ Fashion is a modern clothing brand designed for the latest trends.
+              We provide stylish outfits for boys, girls, and accessories that match GenZ lifestyle.
+            </p>
+          </div>
+
+          {/* Address */}
+          <div style={{ marginTop: "40px" }}>
+            <h2>Our Store</h2>
+            <p>GenZ Fashion Store</p>
+            <p>Habshiguda, Hyderabad, Telangana, India</p>
+            <p>📞 +91 9123456789</p>
+            <p>📧 support@genzfashion.com</p>
+          </div>
+
+          {/* Footer */}
+          <div style={{ marginTop: "60px", padding: "20px", background: "#111", color: "white" }}>
+            <p>© 2026 GenZ Fashion. All rights reserved.</p>
+          </div>
+
         </div>
       )}
 
@@ -64,16 +95,20 @@ export default function App() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))", gap: "20px" }}>
             {showProducts(page).map((product) => (
               <div key={product.id} style={{ boxShadow: "0 4px 10px rgba(0,0,0,0.1)", padding: "10px" }}>
+                
                 <img
-                  src={product.image}  alt="product"
+                  src={product.image}
+                  alt={product.name}
                   style={{ width: "100%", height: "200px", objectFit: "cover", cursor: "pointer" }}
                   onClick={() => {
                     setSelectedProduct(product);
                     setPage("details");
                   }}
                 />
+
                 <h4>{product.name}</h4>
                 <p>₹{product.price}</p>
+
                 <button onClick={() => setWishlist([...wishlist, product])}>❤️</button>
                 <button onClick={() => setOrders([...orders, { ...product, qty: 1 }])}>🛒</button>
               </div>
@@ -86,20 +121,25 @@ export default function App() {
       {page === "details" && selectedProduct && (
         <div style={{ padding: "40px" }}>
           <button onClick={() => setPage("home")}>⬅ Back</button>
-          <div style={{ display: "flex", gap: "40px" }}>
-            <img src={selectedProduct.image} width="300" />
+
+          <div style={{ display: "flex", gap: "40px", flexWrap: "wrap" }}>
+            <img src={selectedProduct.image} alt={selectedProduct.name} width="300" />
+
             <div>
               <h2>{selectedProduct.name}</h2>
               <p>₹{selectedProduct.price}</p>
 
               <div>
-                <button onClick={() => setQuantity(quantity - 1)}>-</button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
                 <span style={{ margin: "10px" }}>{quantity}</span>
                 <button onClick={() => setQuantity(quantity + 1)}>+</button>
               </div>
 
               <br />
-              <button onClick={() => setOrders([...orders, { ...selectedProduct, qty: quantity }])}>Add to Cart</button>
+
+              <button onClick={() => setOrders([...orders, { ...selectedProduct, qty: quantity }])}>
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -109,11 +149,14 @@ export default function App() {
       {page === "wishlist" && (
         <div style={{ padding: "20px" }}>
           <h2>Wishlist</h2>
-          {wishlist.map((item, i) => (
+
+          {wishlist.length === 0 ? <p>No items</p> : wishlist.map((item, i) => (
             <div key={i}>
-              <img src={item.image} width="100" />
+              <img src={item.image} alt={item.name} width="100" />
               <p>{item.name}</p>
-              <button onClick={() => setWishlist(wishlist.filter((_, index) => index !== i))}>🗑 Remove</button>
+              <button onClick={() => setWishlist(wishlist.filter((_, index) => index !== i))}>
+                🗑 Remove
+              </button>
             </div>
           ))}
         </div>
@@ -123,9 +166,10 @@ export default function App() {
       {page === "orders" && (
         <div style={{ padding: "20px" }}>
           <h2>Orders</h2>
-          {orders.map((item, i) => (
+
+          {orders.length === 0 ? <p>No orders</p> : orders.map((item, i) => (
             <div key={i}>
-              <img src={item.image} width="100" />
+              <img src={item.image} alt={item.name} width="100" />
               <p>{item.name} (Qty: {item.qty || 1})</p>
             </div>
           ))}
@@ -136,15 +180,23 @@ export default function App() {
       {page === "checkout" && (
         <div style={{ padding: "40px" }}>
           <h2>💳 Checkout</h2>
+
           {orders.map((item, i) => (
-            <p key={i}>{item.name} - ₹{item.price} x {item.qty || 1}</p>
+            <p key={i}>
+              {item.name} - ₹{item.price} x {item.qty || 1}
+            </p>
           ))}
+
           <h3>
             Total: ₹{orders.reduce((total, item) => total + item.price * (item.qty || 1), 0)}
           </h3>
-          <button>Place Order</button>
+
+          <button onClick={() => alert("Order Placed Successfully ✅")}>
+            Place Order
+          </button>
         </div>
       )}
+
     </div>
   );
 }
