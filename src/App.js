@@ -65,7 +65,7 @@ export default function App() {
             {showProducts(page).map((product) => (
               <div key={product.id} style={{ boxShadow: "0 4px 10px rgba(0,0,0,0.1)", padding: "10px" }}>
                 <img
-                  src={product.image}
+                  src={product.image}  alt="product"
                   style={{ width: "100%", height: "200px", objectFit: "cover", cursor: "pointer" }}
                   onClick={() => {
                     setSelectedProduct(product);
